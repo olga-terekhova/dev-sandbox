@@ -10,29 +10,29 @@
   // NET_ADMIN and NET_RAW are required to run iptables inside the container
   "runArgs": [
     "--cap-add=NET_ADMIN",
-    "--cap-add=NET_RAW"
+    "--cap-add=NET_RAW",
+    "--name=dev-sandbox-${localEnv:PROJECT_NAME}"
   ],
 
-  // Option C: control dir with explicit project mounts
-  // ${localWorkspaceFolder} resolves to /dev on the host
-  // .devcontainer/ and .claude/ live under /dev; projects like hello-world are siblings of /dev
+  // ${localWorkspaceFolder} resolves to the dev-sandbox directory on the host.
+  // PROJECT_NAME and PROJECT_PATH are injected by open-devcontainer.ps1.
   "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
   "mounts": [
-    // Explicit project mounts
-    "source=${localWorkspaceFolder}/../hello-world,target=/workspace/hello-world,type=bind"
-
+    "source=${localEnv:PROJECT_PATH},target=/workspace/${localEnv:PROJECT_NAME},type=bind"
   ],
 
   "containerEnv": {
-    // Point Claude config at the bind-mounted host directory
     "CLAUDE_CONFIG_DIR": "/workspace/.claude",
-    // Point uv config
     "UV_CACHE_DIR": "/workspace/.uv-data/cache"
   },
 
-  // Run the firewall before VS Code opens -- waitFor ensures it is up first
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
   "waitFor": "postStartCommand",
+
+  // Opens the multi-root workspace file after VS Code attaches to the container.
+  // This pins the Explorer to exactly the folders for this session.
+  "postAttachCommand": "code /workspace/workspace.code-workspace",
+  
   "remoteUser": "dev"
 }
