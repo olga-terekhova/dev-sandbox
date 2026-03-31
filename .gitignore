@@ -1,3 +1,7 @@
-.claude
+.claude/*
+!.claude/CLAUDE.md
+!.claude/skills/
+!.claude/skills/*/
+!.claude/skills/*/SKILL.md
 .uv-data
 *.zip
