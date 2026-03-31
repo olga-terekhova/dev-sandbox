@@ -29,7 +29,8 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 # Create non-root user
 RUN useradd -m -s /bin/bash dev \
-    && mkdir -p /workspace 
+    && mkdir -p /workspace  \
+    && mkdir -p /projects
 
 # Firewall script is copied from .devcontainer/ at build context root
 COPY init-firewall.sh /usr/local/bin/init-firewall.sh

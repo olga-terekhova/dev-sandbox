@@ -16,11 +16,15 @@
 
   // ${localWorkspaceFolder} resolves to the dev-sandbox directory on the host.
   // PROJECT_NAME and PROJECT_PATH are injected by open-devcontainer.ps1.
-  "workspaceFolder": "/workspace",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+
+  // PROJECT_PATH is the absolute host path to the project directory.
+  // Mounted under /projects/ to avoid nesting inside /workspace,
+  // which would cause Docker to create an empty folder on the host.
   "mounts": [
-    "source=${localEnv:PROJECT_PATH},target=/workspace/${localEnv:PROJECT_NAME},type=bind"
+    "source=${localEnv:PROJECT_PATH},target=/projects/${localEnv:PROJECT_NAME},type=bind"
   ],
+  "workspaceFolder": "/projects/${localEnv:PROJECT_NAME}",
 
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/workspace/.claude",
@@ -30,9 +34,5 @@
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
   "waitFor": "postStartCommand",
 
-  // Opens the multi-root workspace file after VS Code attaches to the container.
-  // This pins the Explorer to exactly the folders for this session.
-  "postAttachCommand": "code /workspace/workspace.code-workspace",
-  
   "remoteUser": "dev"
 }

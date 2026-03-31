@@ -58,24 +58,6 @@ if (-not (Test-Path $projectPath)) {
     exit 1
 }
 
-# -- Write workspace file ------------------------------------------------------
-
-# Written to dev-sandbox root (mounted at /workspace inside the container).
-# postAttachCommand in devcontainer.json opens it after VS Code connects,
-# switching the Explorer to exactly the two folders for this session.
-# The file is gitignored; only this script (which generates it) is versioned.
-$workspaceFile = Join-Path $devSandboxPath "workspace.code-workspace"
-$workspaceContent = @"
-{
-  "folders": [
-    { "path": "." },
-    { "path": ".claude" },
-    { "path": "../$projectName" }
-  ]
-}
-"@
-Set-Content -Path $workspaceFile -Encoding UTF8 -Value $workspaceContent
-Write-Host "Wrote workspace file: $workspaceFile"
 
 
 # -- Manage containers ---------------------------------------------------------
