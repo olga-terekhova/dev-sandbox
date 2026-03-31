@@ -1,5 +1,5 @@
 {
-  "name": "Claude Code Sandbox",
+  "name": "Dev Sandbox",
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
@@ -17,13 +17,8 @@
   // ${localWorkspaceFolder} resolves to /dev on the host
   // .devcontainer/ and .claude/ live under /dev; projects like hello-world are siblings of /dev
   "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
   "mounts": [
-    // Bind-mount host .claude dir so auth tokens and settings persist across rebuilds
-    "source=${localWorkspaceFolder}/.claude,target=/workspace/.claude,type=bind",
-    //Bind-mount uv cache
-    "source=${localWorkspaceFolder}/.uv-data,target=/workspace/.uv-data,type=bind",
-    //Bind-mount .devcontainer
-    "source=${localWorkspaceFolder}/.devcontainer,target=/workspace/.devcontainer,type=bind",
     // Explicit project mounts
     "source=${localWorkspaceFolder}/../hello-world,target=/workspace/hello-world,type=bind"
 
@@ -33,12 +28,11 @@
     // Point Claude config at the bind-mounted host directory
     "CLAUDE_CONFIG_DIR": "/workspace/.claude",
     // Point uv config
-    "UV_CACHE_DIR": "/workspace/.uv-data/cache",
-    // Memory headroom for Claude Code and any subagents
-    "NODE_OPTIONS": "--max-old-space-size=4096"
+    "UV_CACHE_DIR": "/workspace/.uv-data/cache"
   },
 
   // Run the firewall before VS Code opens -- waitFor ensures it is up first
   "postStartCommand": "sudo /usr/local/bin/init-firewall.sh",
-  "waitFor": "postStartCommand"
+  "waitFor": "postStartCommand",
+  "remoteUser": "dev"
 }
