@@ -12,18 +12,20 @@ other sudo operations -- they will fail.
 
 ## Workspace Layout
 
-/workspace is the root. It is a bind-mount of the host control directory, which also
-contains .devcontainer/, .claude/, and .uv-data/. Individual projects are mounted as
-subdirectories:
+/workspace is a bind-mount of the host control directory. It contains only the
+control subdirectories -- do not work here directly:
 
     /workspace/
         .claude/          # Claude Code config and auth -- do not modify
         .uv-data/         # uv cache -- do not modify
         .devcontainer/    # Container config -- do not modify
-        hello-world/      # Example project mount
-        <project>/        # Other projects mounted the same way
 
-Always work inside the relevant project subdirectory, not at /workspace root.
+Each container runs a single project, mounted separately at:
+
+    /projects/
+        <project>/        # Active project -- work here
+
+Always work inside /projects/<project>/, not at /workspace.
 
 ## Package and Environment Management
 
