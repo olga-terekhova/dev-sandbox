@@ -13,3 +13,5 @@ This repo defines a devcontainer with the following features:
   - adds the 'analyze' skill to Claude to perform analysis before planning and implementation
 
 The devcontainer is made for WSL2 on Windows, assuming the host directories are on the Windows filesystem - no need in UID matching between the users on the host machine and in the container.  
+
+![Devcontainer mounting an arbitrary project folder](docs/process.webp)  
